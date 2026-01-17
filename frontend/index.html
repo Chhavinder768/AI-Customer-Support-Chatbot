@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Support System</title>
+
+    <!-- Simple modern styling -->
+    <style>
+      :root {
+        --bg: #0f172a;          /* dark slate */
+        --card: #111827;        /* dark card */
+        --primary: #6366f1;     /* indigo */
+        --secondary: #22d3ee;   /* cyan */
+        --text: #e5e7eb;        /* light text */
+        --muted: #9ca3af;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        background: radial-gradient(
+          circle at top,
+          #1e293b,
+          var(--bg)
+        );
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* App container (React root renders inside this) */
+      #root {
+        width: 100%;
+        max-width: 720px;
+        background: linear-gradient(
+          180deg,
+          rgba(99, 102, 241, 0.08),
+          rgba(34, 211, 238, 0.05)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+
+      /* Small header shown before React loads */
+      .app-title {
+        text-align: center;
+        margin-bottom: 16px;
+      }
+
+      .app-title h1 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 600;
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          var(--secondary)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .app-title p {
+        margin: 6px 0 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Optional static header (React will render below/inside) -->
+    <div id="root">
+      <div class="app-title">
+        <h1>AI Customer Support</h1>
+        <p>Multi-Agent • Real-Time • Database-Backed</p>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
