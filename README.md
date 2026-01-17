@@ -21,7 +21,7 @@ This project is designed as a **real-world full-stack system**, focusing on clea
 ## 🏗️ Architecture
 
 The system is split into **Frontend**, **Backend**, and **Database**, each with a well-defined responsibility.
-
+```
 Backend
 ├── app.ts                    Entry point
 ├── routes.ts                 API route definitions
@@ -52,7 +52,7 @@ Frontend
 │       ├── ConversationList.tsx
 │       └── MessageInput.tsx
 └── main.tsx                  React entry point
-
+```
 ## 📦 Requirements
 
 Before running the project, ensure you have:
