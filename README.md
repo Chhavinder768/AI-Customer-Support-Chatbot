@@ -78,18 +78,18 @@ Ubuntu
 sudo apt install postgresql postgresql-contrib
 ```
 
-###2️⃣ Create Database
+### 2️⃣ Create Database
 ```
 psql postgres
 ```
 
-###3️⃣ Environment Variables
+### 3️⃣ Environment Variables
 ```
 DATABASE_URL="postgresql://username:password@localhost:5432/ai_support_system"
 OPENAI_API_KEY="your_openai_api_key"
 ```
 
-###4️⃣ Prisma Setup
+### 4️⃣ Prisma Setup
 ```
 cd backend
 npm install
@@ -98,20 +98,20 @@ npx prisma migrate dev
 ```
 This will create all required tables in PostgreSQL.
 
-###🚀 Running the Backend
+### 🚀 Running the Backend
 ```
 cd backend
 npm run dev
 ```
 
-###🎨 Running the Frontend
+### 🎨 Running the Frontend
 ```
 cd frontend
 npm install
 npm run dev
 ```
 
-###🔁 End-to-End Flow
+### 🔁 End-to-End Flow
 User sends a message from the frontend
 Backend receives the request via /chat/messages
 Router selects the correct agent
