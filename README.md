@@ -1,112 +1,120 @@
 # AI Customer Support System 🤖
 
-This project is a full-stack AI-powered customer support system that uses multiple specialized agents (Support, Order, Billing) to handle user queries intelligently.
+A multi-agent AI-powered customer support system that intelligently routes user queries to specialized agents — **Support**, **Order**, and **Billing** — while preserving conversation context using PostgreSQL.
 
-Instead of a single chatbot, the system routes each message to the most suitable agent and maintains conversation context across messages. The goal is to simulate a real-world customer support workflow in a clean, reliable way.
-
----
-
-## ✨ Key Features
-
-- Multi-agent architecture (Support, Order, Billing)
-- Intelligent routing based on user intent
-- Persistent conversation state (agent does not reset randomly)
-- Database-backed conversations and messages
-- Clean and simple chat UI
-- No hallucinated intent (agents respond only to what user asks)
-- Frontend and backend fully separated
-- Production-style architecture (controller, service, agents, tools)
+This project is designed as a **real-world full-stack system**, focusing on clean architecture, reliability, and separation of concerns rather than a single chatbot demo.
 
 ---
 
-## 🧠 How the System Works
+## 🚀 Features
 
-1. User sends a message from the frontend
-2. Backend receives the message with a `conversationId`
-3. A router decides **which agent** should handle the message
-4. The selected agent generates a response using context + rules
-5. The response is saved to the database
-6. Frontend displays only the assistant’s reply (not raw JSON)
-
-Each conversation remembers:
-- which agent is currently active
-- previous messages
-- conversation state
+- 🧠 Multi-agent architecture (Support / Order / Billing)
+- 🔁 Conversation context persistence
+- 🗄️ PostgreSQL-backed message and state storage
+- 🧩 Clear backend layering (Controller → Service → Router → Agent)
+- 🪟 Simple and clean React chat UI
+- 🛡️ Safe intent handling (no hallucinated intent)
+- ⚙️ Modular and extensible design
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture
 
-### Backend (Node.js + TypeScript)
-routes
-└── chat.controller.ts
-└── chat.service.ts
-└── router.agent.ts
-├── support.agent.ts
-├── order.agent.ts
-└── billing.agent.ts
-└── tools/
-├── conversation.tool.ts
-├── order.tool.ts
-└── billing.tool.ts
+The system is split into **Frontend**, **Backend**, and **Database**, each with a well-defined responsibility.
 
+Backend
+├── app.ts                     Entry point
+├── routes.ts                 API route definitions
+├── controllers/
+│   └── chat.controller.ts    HTTP handling
+├── services/
+│   └── chat.service.ts       Conversation orchestration
+├── agents/
+│   ├── router.agent.ts       Router selector
+│   ├── support.agent.ts      Support logic
+│   ├── order.agent.ts        Order logic
+│   └── billing.agent.ts      Billing logic
+├── tools/                    Database access
+│   ├── conversation.tool.ts
+│   ├── order.tool.ts
+│   └── billing.tool.ts
+└── db/
+    └── prisma.ts             Prisma client
 
-### Responsibilities
+Frontend
+├── src/
+│   ├── App.tsx               Main chat UI
+│   ├── chat.api.ts           API calls
+│   ├── types/
+│   │   └── chat.ts           Message types
+│   └── components/
+│       ├── ChatWindow.tsx
+│       ├── ConversationList.tsx
+│       └── MessageInput.tsx
+└── main.tsx                  React entry point
 
-- **Controller** → Handles HTTP requests
-- **Service** → Manages conversation flow and state
-- **Router Agent** → Decides which agent should respond
-- **Agents** → Generate responses (Support / Order / Billing)
-- **Tools** → Database access (Prisma)
-- **Database** → Stores conversations, messages, agent state
+## 📦 Requirements
+
+Before running the project, ensure you have:
+
+- **Node.js** (v18 or higher)
+- **npm** (or yarn)
+- **PostgreSQL**
+- **Git**
+- **OpenAI API Key**
 
 ---
 
-## 🖥️ Frontend Architecture (React + Vite)
+## 🗄️ PostgreSQL Setup
 
-sequenceDiagram
-    participant User
-    participant Frontend (React)
-    participant ChatAPI
-    participant ChatController
-    participant ChatService
-    participant RouterAgent
-    participant SupportAgent
-    participant OrderAgent
-    participant BillingAgent
-    participant Database
+### 1️⃣ Install PostgreSQL
 
-    User->>Frontend (React): Type message
-    Frontend (React)->>ChatAPI: POST /chat/messages (message, conversationId)
-    ChatAPI->>ChatController: HTTP request
-    ChatController->>ChatService: processMessage()
+**macOS (Homebrew)**
+```bash
+brew install postgresql
+```
+Ubuntu
+```
+sudo apt install postgresql postgresql-contrib
+```
 
-    alt New conversation
-        ChatService->>Database: createConversation()
-        Database-->>ChatService: conversationId
-    end
+###2️⃣ Create Database
+```
+psql postgres
+```
 
-    ChatService->>Database: getConversation(conversationId)
-    ChatService->>RouterAgent: routeMessage(message, activeAgent)
+###3️⃣ Environment Variables
+```
+DATABASE_URL="postgresql://username:password@localhost:5432/ai_support_system"
+OPENAI_API_KEY="your_openai_api_key"
+```
 
-    alt Support query
-        RouterAgent->>SupportAgent: handleSupportQuery()
-        SupportAgent-->>RouterAgent: reply
-    else Order query
-        RouterAgent->>OrderAgent: handleOrderQuery()
-        OrderAgent-->>RouterAgent: reply
-    else Billing query
-        RouterAgent->>BillingAgent: handleBillingQuery()
-        BillingAgent-->>RouterAgent: reply
-    end
+###4️⃣ Prisma Setup
+```
+cd backend
+npm install
+npx prisma generate
+npx prisma migrate dev
+```
+This will create all required tables in PostgreSQL.
 
-    RouterAgent-->>ChatService: reply + agent
-    ChatService->>Database: saveMessage(user + assistant)
-    ChatService->>Database: updateActiveAgent()
-    ChatService-->>ChatController: response
-    ChatController-->>ChatAPI: JSON response
-    ChatAPI-->>Frontend (React): reply + conversationId
-    Frontend (React)-->>User: Display assistant message
+###🚀 Running the Backend
+```
+cd backend
+npm run dev
+```
 
+###🎨 Running the Frontend
+```
+cd frontend
+npm install
+npm run dev
+```
 
-
+###🔁 End-to-End Flow
+User sends a message from the frontend
+Backend receives the request via /chat/messages
+Router selects the correct agent
+Agent generates a response
+Conversation state and messages are saved to PostgreSQL
+Frontend displays the assistant reply
