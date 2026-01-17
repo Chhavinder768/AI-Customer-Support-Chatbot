@@ -19,7 +19,7 @@ Instead of a single chatbot, the system routes each message to the most suitable
 
 ---
 
-## 🧠 How the System Works (High Level)
+## 🧠 How the System Works
 
 1. User sends a message from the frontend
 2. Backend receives the message with a `conversationId`
@@ -38,4 +38,75 @@ Each conversation remembers:
 ## 🏗️ Architecture Overview
 
 ### Backend (Node.js + TypeScript)
+routes
+└── chat.controller.ts
+└── chat.service.ts
+└── router.agent.ts
+├── support.agent.ts
+├── order.agent.ts
+└── billing.agent.ts
+└── tools/
+├── conversation.tool.ts
+├── order.tool.ts
+└── billing.tool.ts
+
+
+### Responsibilities
+
+- **Controller** → Handles HTTP requests
+- **Service** → Manages conversation flow and state
+- **Router Agent** → Decides which agent should respond
+- **Agents** → Generate responses (Support / Order / Billing)
+- **Tools** → Database access (Prisma)
+- **Database** → Stores conversations, messages, agent state
+
+---
+
+## 🖥️ Frontend Architecture (React + Vite)
+
+sequenceDiagram
+    participant User
+    participant Frontend (React)
+    participant ChatAPI
+    participant ChatController
+    participant ChatService
+    participant RouterAgent
+    participant SupportAgent
+    participant OrderAgent
+    participant BillingAgent
+    participant Database
+
+    User->>Frontend (React): Type message
+    Frontend (React)->>ChatAPI: POST /chat/messages (message, conversationId)
+    ChatAPI->>ChatController: HTTP request
+    ChatController->>ChatService: processMessage()
+
+    alt New conversation
+        ChatService->>Database: createConversation()
+        Database-->>ChatService: conversationId
+    end
+
+    ChatService->>Database: getConversation(conversationId)
+    ChatService->>RouterAgent: routeMessage(message, activeAgent)
+
+    alt Support query
+        RouterAgent->>SupportAgent: handleSupportQuery()
+        SupportAgent-->>RouterAgent: reply
+    else Order query
+        RouterAgent->>OrderAgent: handleOrderQuery()
+        OrderAgent-->>RouterAgent: reply
+    else Billing query
+        RouterAgent->>BillingAgent: handleBillingQuery()
+        BillingAgent-->>RouterAgent: reply
+    end
+
+    RouterAgent-->>ChatService: reply + agent
+    ChatService->>Database: saveMessage(user + assistant)
+    ChatService->>Database: updateActiveAgent()
+    ChatService-->>ChatController: response
+    ChatController-->>ChatAPI: JSON response
+    ChatAPI-->>Frontend (React): reply + conversationId
+    Frontend (React)-->>User: Display assistant message
+
+
 
