@@ -23,11 +23,8 @@ This project is designed as a **real-world full-stack system**, focusing on clea
 The system is split into **Frontend**, **Backend**, and **Database**, each with a well-defined responsibility.
 
 Backend
-
 ├── app.ts                    Entry point
-
 ├── routes.ts                 API route definitions
-
 ├── controllers/
 │   └── chat.controller.ts    HTTP handling
 ├── services/
