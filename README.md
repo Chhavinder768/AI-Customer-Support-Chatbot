@@ -112,9 +112,15 @@ npm run dev
 ```
 
 ### 🔁 End-to-End Flow
+
 User sends a message from the frontend
+
 Backend receives the request via /chat/messages
+
 Router selects the correct agent
+
 Agent generates a response
+
 Conversation state and messages are saved to PostgreSQL
+
 Frontend displays the assistant reply
